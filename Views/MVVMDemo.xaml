@@ -1,0 +1,151 @@
+<UserControl
+    x:Class="ListBoxDemo.Views.MVVMDemo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ListBoxDemo.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:ListBoxDemo.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="AliceBlue"
+    mc:Ignorable="d">
+
+    <UserControl.DataContext>
+        <viewmodels:MVVMDemoViewModel />
+    </UserControl.DataContext>
+
+    <StackPanel Margin="10">
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="ListBox与MVVM模式" />
+        <TextBlock Style="{StaticResource DescriptionTextBlockStyle}" Text="这个示例展示了如何在MVVM模式下使用ListBox实现项目的增删改查功能。" />
+
+        <Grid Margin="0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+
+            <!--  左侧列表  -->
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <DockPanel Margin="0,0,0,10" LastChildFill="True">
+                    <StackPanel
+                        Margin="10,0,0,0"
+                        DockPanel.Dock="Right"
+                        Orientation="Horizontal">
+                        <Button
+                            Command="{Binding AddItemCommand}"
+                            Content="添加项目"
+                            Style="{StaticResource MainButtonStyle}" />
+                    </StackPanel>
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="项目列表" />
+                </DockPanel>
+
+                <ListBox
+                    Height="300"
+                    HorizontalContentAlignment="Stretch"
+                    BorderThickness="1"
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding SelectedItem}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Id}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Text="{Binding Title}" />
+                                <Button
+                                    Grid.Column="2"
+                                    Margin="5,0"
+                                    Padding="5,2"
+                                    Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                    CommandParameter="{Binding}"
+                                    Content="删除" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <!--  右侧详情  -->
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontWeight="Bold"
+                    Text="选中项目详情" />
+
+                <Border
+                    Padding="15"
+                    Background="#f8f8f8"
+                    BorderBrush="#ddd"
+                    BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="0,20"
+                            HorizontalAlignment="Center"
+                            Foreground="Gray"
+                            Text="当前未选中任何项目"
+                            Visibility="{Binding SelectedItem, Converter={StaticResource InverseBoolToVisConverter}}" />
+
+                        <StackPanel Visibility="{Binding SelectedItem, Converter={StaticResource BoolToVisConverter}}">
+                            <TextBlock
+                                Margin="0,5"
+                                FontWeight="Bold"
+                                Text="ID:" />
+                            <TextBlock Margin="10,0,0,10" Text="{Binding SelectedItem.Id}" />
+
+                            <TextBlock
+                                Margin="0,5"
+                                FontWeight="Bold"
+                                Text="标题:" />
+                            <TextBlock Margin="10,0,0,10" Text="{Binding SelectedItem.Title}" />
+
+                            <TextBlock
+                                Margin="0,20,0,0"
+                                FontStyle="Italic"
+                                Foreground="Gray"
+                                Text="点击一个项目可查看详情，点击添加按钮可创建新项目，点击删除按钮可移除项目。"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <GroupBox Margin="0,15,0,0" Header="MVVM绑定代码">
+                    <TextBox
+                        Height="150"
+                        IsReadOnly="True"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto">
+                        &lt;ListBox ItemsSource="{Binding Items}"
+                        SelectedItem="{Binding SelectedItem}"&gt;
+                        &lt;ListBox.ItemTemplate&gt;
+                        &lt;DataTemplate&gt;
+                        &lt;Grid&gt;
+                        &lt;TextBlock Text="{Binding Title}" /&gt;
+                        &lt;Button Content="删除"
+                        Command="{Binding DataContext.RemoveItemCommand,
+                        RelativeSource={RelativeSource AncestorType=ListBox}}"
+                        CommandParameter="{Binding}" /&gt;
+                        &lt;/Grid&gt;
+                        &lt;/DataTemplate&gt;
+                        &lt;/ListBox.ItemTemplate&gt;
+                        &lt;/ListBox&gt;
+                    </TextBox>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</UserControl> 
