@@ -3,6 +3,7 @@
 ## 项目介绍
 
 本项目是基于WPF（Windows Presentation Foundation）技术的ListBox控件学习示例程序，采用.NET Core 8.0开发。项目演示了WPF ListBox控件的各种常用功能和高级特性，是学习WPF ListBox控件的理想参考资源。
+![image](https://github.com/user-attachments/assets/1824765f-b507-4530-9040-50481aa6bd1b)
 
 ## 开发环境
 
